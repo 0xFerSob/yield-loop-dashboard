@@ -1,4 +1,4 @@
-import { DefiLlamaPool, DefiLlamaBorrowPool, BorrowMarket } from "../types";
+import { DefiLlamaPool, DefiLlamaBorrowPool, BorrowMarket, DefiLlamaChartPoint } from "../types";
 import { AAVE_TOKEN_ADDRESSES } from "../constants";
 import { getAaveLink, getHorizonLink } from "../utils";
 
@@ -66,6 +66,17 @@ export function findBaseYieldByProject(
   );
   if (match && match.apy !== null && match.apy !== undefined) return match.apy;
   return null;
+}
+
+/**
+ * Fetch historical chart data for a pool
+ */
+export async function fetchPoolChart(
+  poolId: string
+): Promise<DefiLlamaChartPoint[]> {
+  const res = await fetch(`https://yields.llama.fi/chart/${poolId}`);
+  const json = await res.json();
+  return json?.data ?? [];
 }
 
 /**

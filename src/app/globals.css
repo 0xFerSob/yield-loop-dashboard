@@ -6,3 +6,12 @@ body {
   background-color: #0a0a0f;
   color: #e5e7eb;
 }
+
+.input-field {
+  @apply w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-gray-200 text-sm
+    focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500;
+}
+
+.input-display {
+  @apply w-full bg-gray-800/50 border border-gray-700/50 rounded-lg px-3 py-2.5 text-gray-300 text-sm font-mono;
+}

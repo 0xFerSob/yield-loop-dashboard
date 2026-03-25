@@ -8,7 +8,7 @@ interface AssetTabsProps {
 }
 
 export default function AssetTabs({ activeTab, onTabChange }: AssetTabsProps) {
-  const tabs = ["Overview", ...ASSETS.map((a) => a.name)];
+  const tabs = ["Overview", ...ASSETS.map((a) => a.name), "Calculator"];
 
   return (
     <div className="flex gap-1 mb-6 overflow-x-auto pb-2">
