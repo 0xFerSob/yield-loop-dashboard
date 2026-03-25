@@ -1,4 +1,4 @@
-import { MorphoMarket, BorrowMarket } from "../types";
+import { MorphoMarket, BorrowMarket, MorphoHistoricalPoint } from "../types";
 import { BORROW_ASSET_ADDRESSES, MORPHO_COLLATERAL_ADDRESSES } from "../constants";
 import { getMorphoLink } from "../utils";
 
@@ -28,6 +28,10 @@ const QUERY = `
           borrowApy
           supplyApy
           liquidityAssetsUsd
+          apyAtTarget
+          utilization
+          borrowAssetsUsd
+          supplyAssetsUsd
         }
         lltv
       }
@@ -59,6 +63,37 @@ export async function fetchMorphoMarkets(): Promise<MorphoMarket[]> {
   const items: MorphoMarket[] = json?.data?.markets?.items ?? [];
   morphoCache = { data: items, ts: Date.now() };
   return items;
+}
+
+const HISTORICAL_QUERY = `
+  query GetMarketHistory($uniqueKey: String!) {
+    marketByUniqueKey(uniqueKey: $uniqueKey) {
+      historicalState {
+        borrowApy {
+          x
+          y
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * Fetch historical borrow APY for a specific Morpho market
+ */
+export async function fetchMorphoHistory(
+  uniqueKey: string
+): Promise<MorphoHistoricalPoint[]> {
+  const res = await fetch(MORPHO_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: HISTORICAL_QUERY,
+      variables: { uniqueKey },
+    }),
+  });
+  const json = await res.json();
+  return json?.data?.marketByUniqueKey?.historicalState?.borrowApy ?? [];
 }
 
 /**

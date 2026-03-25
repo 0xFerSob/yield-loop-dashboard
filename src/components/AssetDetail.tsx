@@ -1,13 +1,15 @@
 "use client";
 
-import { StrategyRow } from "@/lib/types";
+import { StrategyRow, MorphoMarket } from "@/lib/types";
 import { formatPct, formatUsd } from "@/lib/utils";
+import HistoricalCharts from "./HistoricalCharts";
 
 interface AssetDetailProps {
   strategy: StrategyRow;
+  morphoMarkets: MorphoMarket[];
 }
 
-export default function AssetDetail({ strategy }: AssetDetailProps) {
+export default function AssetDetail({ strategy, morphoMarkets }: AssetDetailProps) {
   const { asset, baseYield, bestBorrow, spread, net3x, net5x, allBorrowMarkets } = strategy;
 
   // Sort by borrow rate ascending
@@ -89,6 +91,8 @@ export default function AssetDetail({ strategy }: AssetDetailProps) {
           </div>
         )}
       </div>
+
+      <HistoricalCharts asset={asset} morphoMarkets={morphoMarkets} />
     </div>
   );
 }

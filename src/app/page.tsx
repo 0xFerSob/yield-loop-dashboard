@@ -6,10 +6,12 @@ import Header from "@/components/Header";
 import AssetTabs from "@/components/AssetTabs";
 import SummaryTable from "@/components/SummaryTable";
 import AssetDetail from "@/components/AssetDetail";
+import LoopingCalculator from "@/components/LoopingCalculator";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("Overview");
-  const { strategies, isLoading, error, refresh, lastUpdated } = useYieldData();
+  const { strategies, isLoading, error, refresh, lastUpdated, morphoMarkets, borrowPools } =
+    useYieldData();
 
   const activeStrategy = strategies.find((s) => s.asset.name === activeTab);
 
@@ -46,15 +48,27 @@ export default function Home() {
         <SummaryTable strategies={strategies} onRowClick={setActiveTab} />
       )}
 
-      {!isLoading && activeTab !== "Overview" && activeStrategy && (
-        <AssetDetail strategy={activeStrategy} />
+      {!isLoading && activeTab === "Calculator" && (
+        <LoopingCalculator
+          strategies={strategies}
+          morphoMarkets={morphoMarkets}
+          borrowPools={borrowPools}
+        />
       )}
 
-      {!isLoading && activeTab !== "Overview" && !activeStrategy && (
-        <div className="text-center text-gray-500 py-12">
-          No data found for {activeTab}
-        </div>
-      )}
+      {!isLoading &&
+        activeTab !== "Overview" &&
+        activeTab !== "Calculator" &&
+        activeStrategy && <AssetDetail strategy={activeStrategy} morphoMarkets={morphoMarkets} />}
+
+      {!isLoading &&
+        activeTab !== "Overview" &&
+        activeTab !== "Calculator" &&
+        !activeStrategy && (
+          <div className="text-center text-gray-500 py-12">
+            No data found for {activeTab}
+          </div>
+        )}
     </main>
   );
 }

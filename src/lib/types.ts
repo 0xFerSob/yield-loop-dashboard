@@ -73,6 +73,76 @@ export interface MorphoMarket {
     borrowApy: number | null;
     supplyApy: number | null;
     liquidityAssetsUsd: number | null;
+    apyAtTarget: number | null;
+    utilization: number | null;
+    borrowAssetsUsd: number | null;
+    supplyAssetsUsd: number | null;
   };
   lltv: string;
+}
+
+// Calculator types
+export interface DebtOption {
+  label: string; // e.g. "PYUSD (Morpho)"
+  venue: string;
+  borrowAsset: string;
+  currentBorrowApy: number;
+  liquidationLtv: number; // 0-1
+  // For IRM calculation
+  totalBorrowedUsd: number;
+  totalSuppliedUsd: number;
+  // Morpho-specific
+  morphoApyAtTarget?: number;
+}
+
+export interface CalculatorOutputs {
+  assets: number;
+  debt: number;
+  collateralApy: number;
+  estimatedBorrowApy: number;
+  apyPriceImpact: number;
+  loopsRequired: number;
+  liquidationPrice: number;
+  netApy: number;
+}
+
+// Historical chart types
+export type DateRange = "1m" | "3m" | "1y" | "max";
+
+export interface HistoricalDataPoint {
+  timestamp: number; // Unix seconds
+  date: string;
+  value: number;
+}
+
+export interface DefiLlamaChartPoint {
+  timestamp: string;
+  tvlUsd: number;
+  apy: number;
+  apyBase: number | null;
+  apyReward: number | null;
+  il7d: number | null;
+  apyBase7d: number | null;
+}
+
+export interface MorphoHistoricalPoint {
+  x: number;
+  y: number;
+}
+
+export interface CoinGeckoPricePoint {
+  timestamp: number;
+  price: number;
+}
+
+export interface BorrowRateSeriesConfig {
+  venue: string;
+  borrowAsset: string;
+  label: string;
+  color: string;
+}
+
+export interface BorrowRateSeries {
+  config: BorrowRateSeriesConfig;
+  data: HistoricalDataPoint[];
 }

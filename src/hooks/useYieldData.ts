@@ -105,5 +105,8 @@ export function useYieldData() {
     error,
     refresh: mutate,
     lastUpdated: data ? new Date() : null,
+    // Expose raw data for calculator
+    morphoMarkets: data?.morphoMarkets ?? [],
+    borrowPools: data?.borrowPools ?? [],
   };
 }
